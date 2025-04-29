@@ -37,8 +37,8 @@ void setup() {
   myServo.attach(17);
 
   scale.begin(dataPin, clockPin);
-  scale.set_offset(558795.5);
-  scale.set_scale(-4471.4561765);
+  scale.set_offset(558283);
+  scale.set_scale(-1730.5333865);
   scale.tare();
 
   Serial.print("Connecting to WiFi");
@@ -98,15 +98,13 @@ bool isPlateEmpty() {
     w2 = scale.get_units();
     delay(100);
   }
-  Serial.print("Current plate weight: ");
-  Serial.println(w1);
-  return w1 < 6; // weight in grams
+  return w1 < 2; // weight in grams
 }
 
-void openServo() {
-  Serial.println("Opening Servo!");
+void dispenseMeal() {
+  Serial.println("Dispensing meal!");
   myServo.write(90);
-  delay(1000);
+  delay(1500);
   myServo.write(0);
 }
 
@@ -121,12 +119,13 @@ void loop() {
 
     if (currentTime == meal1 || currentTime == meal2 || currentTime == meal3) {
       if (isPlateEmpty()) {
-        openServo();
+        dispenseMeal();
       } else {
-        Serial.println("Food already in bowl. Skipping feed.");
+        Serial.println("Food already in bowl. Skipping meal.");
       }
     }
   }
 
   delay(10);
 }
+
